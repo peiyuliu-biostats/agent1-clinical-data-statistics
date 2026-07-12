@@ -92,4 +92,4 @@ The issue log follows `Open → Under Review → Confirmed → Resolved`, with t
 
 ## Validation Boundary
 
-This is an engineering MVP now. Synthetic data only. One therapeutic area. Sixty subjects. Hallucination rate is not quantified and the system has not been red-teamed. No IQ/OQ/PQ at this stage.
+This is an engineering MVP now. Synthetic data only. One therapeutic area. Sixty subjects. Hallucination rate is not quantified and the system has not been red-teamed. No IQ/OQ/PQ at this stage, the distance between an engineering MVP and a validated system is measured in those, not in code
