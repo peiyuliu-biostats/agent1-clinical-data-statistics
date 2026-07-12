@@ -1,54 +1,71 @@
 # Clinical Statistics Agent
 
-An evidence-grounded, interactive AI assistant designed to support clinical statisticians navigating the complexities of CDISC-based clinical trials. Inspired by my real-world experiences in BMS Data Quantitative Sciences Department, where junior statisticians often encounter challenges with unfamiliar disease areas, clinical terminology, trial concepts, and programming standards, this assistant helps bridge the gap between statistical expertise and therapeutic knowledges.
+An evidence-grounded assistant for clinical statisticians working with CDISC-based trials. Every project-specific answer must carry a citation that resolves to a parsed source document — general medical knowledge is labeled as such and kept separate.
 
-> **Current status** This MVP is not validated for GxP, regulatory submission, medical decision-making, or use with real patient/company data yet.
+> **Engineering MVP.** Not validated for GxP, regulatory submission, medical decision-making, or use with real patient or company data.
 
-## Live Demo
-
-**[Open the live app on Streamlit Cloud](https://aiagent-clinical-data-statistics.streamlit.app/)** — no installation needed.
+**[Live demo](URL)** · Streamlit Cloud, no installation needed. Runs in mock mode by default.
 
 ---
 
-## 1. Motivation — Why Build This Agent?
+## Why
 
-Biostatisticians entering the pharmaceutical industry face an overwhelming volume of domain knowledge that extends far beyond statistics:
+Statisticians rotating into a new therapeutic area face a knowledge load that has little to do with statistics:
 
-- **Terminology and abbreviations**: Clinical trials use hundreds of specialized abbreviations (PFS, OS, ORR, DOR, ITT, mITT, TEAE, SAE, AESI, RECIST, CR, PR, PD, SD...) that carry different meanings depending on context. "PD" can mean "progressive disease" in efficacy analysis or "protocol deviation" in data quality.
+- **Context-dependent abbreviations.** `PD` is progressive disease in an efficacy analysis and protocol deviation in data quality. Hundreds of these, and the context decides.
+- **Specifications inherited without rationale.** SDTM and ADaM specs get passed down as templates. Why a variable exists, how datasets link, what the derivation traces back to — often undocumented.
+- **Protocol–SAP drift.** Conflicts between the two are cheap to catch before database lock and expensive after.
 
-- **Specification design**: Creating SDTM and ADaM specifications requires understanding CDISC standards, variable naming conventions, controlled terminology, derivation rules, and traceability requirements. Junior statisticians often inherit templates without understanding why columns exist or how datasets connect.
+The tool exists so that these questions can be asked against *the actual study documents*, and so that the answer arrives with its evidence attached.
 
-- **Disease understanding across therapeutic areas**: A biostatistician may rotate across cardiovascular, immunology, oncology, neuroscience, and hematology programs. Each area has its own endpoints, assessment schedules, response criteria, regulatory precedents, and analysis conventions. Understanding the disease context is essential for designing meaningful analyses and catching specification errors.
+---
 
-- **FDA regulations and guidelines**: ICH E9(R1) estimands, FDA guidance documents on specific indications, and evolving expectations around multiplicity, missing data handling, and sensitivity analyses all shape how a statistical analysis plan is written.
+## Design
 
-- **SAP and protocol design**: The Statistical Analysis Plan translates protocol objectives into concrete analysis methods. Ensuring consistency between the protocol and SAP — and catching conflicts before database lock — is critical but tedious work that benefits from systematic checking.
+The starting question was not "what can an LLM do here" but **"in a regulated setting, what must an LLM not be allowed to do."** The architecture is derived backwards from that line.
 
-This agent was built to give junior biostatisticians a structured, evidence-grounded tool where they can ask questions about a study and receive answers that are tied to actual project documents, not just general knowledge. Every project claim must be supported by a locally validated citation, teaching users to think in terms of evidence and source documents.
+```
+Documents (PDF/DOCX/XLSX)
+        │
+        ▼
+   Parse & index ──────────► SQLite FTS5
+        │                         │
+        │                         ▼
+        │                    Retrieval (BM25)
+        │                         │
+        ├──► Deterministic ◄──────┤
+        │    spec checks          │
+        │    (no LLM)             ▼
+        │                    LLM (structured JSON)
+        │                         │
+        ▼                         ▼
+   Issue log            ┌─ Citation validation ─┐
+   (state machine,      │  resolves against     │
+    human rationale)    │  local parsed docs    │
+                        └───────────┬───────────┘
+                                    ▼
+                                 Answer
+```
 
-## 2. How AI Tools Assisted Development
+### Three decisions, and what they cost
 
-This project was developed collaboratively with AI coding assistants (Codex, Claude Code). The AI contributed
+**Spec validation runs on deterministic rules, not the LLM.**
+The alternative — letting the model read the spec and flag issues — covers far more ground and is much faster to build. It was rejected because validation output has to be reproducible and traceable: identical input must yield identical output, and every flag must point at the rule that raised it. An LLM cannot offer that.
+*Cost:* rules are hand-maintained and cover a narrow set of checks. Worth it — a validation result that cannot be reproduced is worth nothing in a regulated context, however broad its coverage.
 
-- **Architecture design**: Suggesting the modular structure (agent, database, ingestion, knowledge, specs, service, reporting) and the separation between deterministic validation and LLM-powered Q&A.
-- **Code drafting and degugging**: Draft and review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
-- **Synthetic data generation**: Creating a realistic 60-subject NSCLC Phase III dataset across RAW, SDTM, and ADaM layers with deliberate quality issues for demonstration.
-- **Bug detection and fixing**: Identifying issues like citation validation failures, encoding errors on Windows, API response parsing edge cases, and Streamlit deprecation warnings.
-- **Deployment configuration**: Setting up Streamlit Cloud deployment files, environment variable handling, and security practices for API key management.
+**Retrieval is BM25 over SQLite FTS5, not embeddings.**
+A vector store would generalize better across paraphrase and synonym. It was rejected because retrieval here has to be explainable: a lexical hit can be pointed at — *this passage matched these terms*. A cosine similarity cannot be defended the same way, and every downstream claim has to hang off a citation someone can check.
+*Cost:* weak semantic generalization; synonyms are handled by the terminology layer instead.
 
-## 3. Human Decisions and Debugging
+**Citations are validated locally before an answer is returned.**
+The model returns structured JSON with claims and citations. Each citation is checked against the parsed-document store; a claim whose citation does not resolve is not surfaced as a project fact. General medical knowledge is permitted, but explicitly marked as not project-derived.
+*Cost:* the assistant refuses more often, and answers are narrower. That is the intended failure mode — a plausible-sounding claim with no source is the failure this system is built to prevent.
 
-While AI generated much of the code, the human (me) made all critical decisions:
+The issue log follows `Open → Under Review → Confirmed → Resolved`, with the reviewer's rationale recorded at each transition. This is an audit trail, not a product feature.
 
-- **Domain modeling**: Choosing which clinical concepts to include, how to represent the relationship between Protocol, SAP, SDTM Spec, and ADaM Spec, and what constitutes a meaningful "issue" worth flagging.
-- **Validation rules**: Defining which SDTM/ADaM column checks to run, what severity levels to assign, and how the issue state machine (Open → Under Review → Confirmed → Resolved) should work.
-- **Code reviewing**: Review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), API integration with structured JSON Schema output, and Pydantic data models.
-- **Evidence architecture**: Deciding that all project-specific claims must have validated citations from parsed documents, and that general medical knowledge should be clearly distinguished from project-defined facts.
-- **UI/Bilingual design**: Choosing to use bilingual (English with Chinese annotations) specifically in the Q&A interface to support non-native English speakers, while keeping the rest of the UI in clean English.
-- **Quality review**: Manually testing every feature, verifying that mock answers match real clinical knowledge, checking that Gemini API responses meet quality standards, and debugging integration issues.
-- **Security**: Ensuring private documents such as API keys/real raw data are never committed to version control, configuring `.gitignore` and `.env.example` properly, and reviewing all files before public deployment.
+---
 
-## 4. Features and Usage Guide
+## What's in the demo
 
 ### Tabs
 
@@ -75,4 +92,4 @@ While AI generated much of the code, the human (me) made all critical decisions:
 
 ## Validation Boundary
 
-This is an engineering MVP now. For educatiing and learning at this stage.
+This is an engineering MVP now. Synthetic data only. One therapeutic area. Sixty subjects. Hallucination rate is not quantified and the system has not been red-teamed. No IQ/OQ/PQ at this stage.
