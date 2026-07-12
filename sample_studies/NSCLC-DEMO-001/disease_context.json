@@ -1,0 +1,38 @@
+{
+  "indication": "Non-Small Cell Lung Cancer (NSCLC)",
+  "scope": "Synthetic Phase III solid-tumor demonstration context",
+  "summary": "NSCLC is the major class of lung cancer and includes clinically and molecularly heterogeneous subtypes. Trial interpretation depends on stage, histology, biomarkers, prior therapy, response criteria and assessment schedule.",
+  "trial_relevance": [
+    "Tumor response and progression require predefined assessment criteria.",
+    "Biomarkers and disease stage can influence eligibility, stratification and subgroup analyses.",
+    "Subsequent anticancer therapy and missing tumor assessments are important intercurrent events."
+  ],
+  "common_endpoints": [
+    "PFS",
+    "OS",
+    "ORR",
+    "DOR"
+  ],
+  "common_sdtm_domains": [
+    "DM",
+    "DS",
+    "AE",
+    "EX",
+    "RS",
+    "TR",
+    "TU"
+  ],
+  "common_adam_datasets": [
+    "ADSL",
+    "ADTTE",
+    "ADEFF",
+    "ADAE"
+  ],
+  "statistical_considerations": [
+    "Define event and censoring rules before unblinding.",
+    "Align assessment schedule and missing-assessment rules with the estimand.",
+    "Predefine treatment switching/new anticancer therapy handling.",
+    "Maintain traceability from response records to efficacy parameters."
+  ],
+  "source_note": "Educational summary requiring clinician and senior statistician review; project definitions take priority."
+}

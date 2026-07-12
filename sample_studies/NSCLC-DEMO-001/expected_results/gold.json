@@ -1,0 +1,19 @@
+{
+  "minimum_issue_categories": [
+    "Traceability gap",
+    "Non-executable",
+    "Invalid type"
+  ],
+  "required_terms": [
+    "PFS",
+    "OS",
+    "ORR",
+    "PD",
+    "ITT",
+    "ADSL",
+    "ADTTE"
+  ],
+  "relationship_count": 3,
+  "subjects": 60,
+  "dataset_count": 14
+}

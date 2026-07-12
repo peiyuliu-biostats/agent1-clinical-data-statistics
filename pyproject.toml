@@ -1,0 +1,21 @@
+[project]
+name = "clinical-stat-agent"
+version = "0.1.0"
+description = "Evidence-grounded clinical statistics assistant MVP"
+requires-python = ">=3.11"
+dependencies = [
+  "openai>=2.0",
+  "streamlit>=1.50",
+  "pydantic>=2.0",
+  "pandas>=2.0",
+  "openpyxl>=3.1",
+  "python-docx>=1.1",
+  "pypdf>=6.0",
+  "python-dotenv>=1.0",
+  "jinja2>=3.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider --basetemp=.test_tmp"

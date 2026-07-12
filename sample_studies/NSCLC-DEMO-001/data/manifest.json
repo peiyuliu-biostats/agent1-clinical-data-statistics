@@ -1,0 +1,92 @@
+{
+  "synthetic": true,
+  "seed": 20260712,
+  "subjects": 60,
+  "datasets": [
+    {
+      "name": "raw_demog",
+      "layer": "RAW",
+      "rows": 60,
+      "columns": 12
+    },
+    {
+      "name": "raw_tumor",
+      "layer": "RAW",
+      "rows": 317,
+      "columns": 6
+    },
+    {
+      "name": "raw_ae",
+      "layer": "RAW",
+      "rows": 82,
+      "columns": 5
+    },
+    {
+      "name": "raw_exposure",
+      "layer": "RAW",
+      "rows": 365,
+      "columns": 6
+    },
+    {
+      "name": "dm",
+      "layer": "SDTM",
+      "rows": 60,
+      "columns": 12
+    },
+    {
+      "name": "ds",
+      "layer": "SDTM",
+      "rows": 60,
+      "columns": 8
+    },
+    {
+      "name": "ae",
+      "layer": "SDTM",
+      "rows": 82,
+      "columns": 10
+    },
+    {
+      "name": "ex",
+      "layer": "SDTM",
+      "rows": 365,
+      "columns": 8
+    },
+    {
+      "name": "tu",
+      "layer": "SDTM",
+      "rows": 60,
+      "columns": 8
+    },
+    {
+      "name": "tr",
+      "layer": "SDTM",
+      "rows": 317,
+      "columns": 10
+    },
+    {
+      "name": "rs",
+      "layer": "SDTM",
+      "rows": 353,
+      "columns": 9
+    },
+    {
+      "name": "adsl",
+      "layer": "ADaM",
+      "rows": 60,
+      "columns": 12
+    },
+    {
+      "name": "adtte",
+      "layer": "ADaM",
+      "rows": 120,
+      "columns": 11
+    },
+    {
+      "name": "adeff",
+      "layer": "ADaM",
+      "rows": 60,
+      "columns": 7
+    }
+  ],
+  "disclaimer": "Entirely synthetic demonstration data; no real patient or company data."
+}

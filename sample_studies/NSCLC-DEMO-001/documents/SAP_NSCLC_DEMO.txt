@@ -1,0 +1,23 @@
+NSCLC-DEMO-001 — SIMULATED STATISTICAL ANALYSIS PLAN
+Version 0.9 Draft. This document is synthetic and for demonstration only.
+
+4 Analysis Sets
+The ITT analysis set includes randomized subjects with a valid randomization record. The handling of subjects randomized in error is unresolved. The safety set includes treated subjects.
+
+6 Estimand Framework
+The PFS estimand compares randomized treatments in the ITT population. Death is part of the composite endpoint. New anticancer therapy is handled with a treatment-policy strategy. The strategy for prolonged missing tumor assessments requires final confirmation.
+
+7.1 PFS Analysis
+PFS is analyzed by stratified log-rank test and summarized by Kaplan-Meier methods. Hazard ratio and 95% confidence interval use a stratified Cox model. Contrary to Protocol Section 9.2.1, progression after two or more missed assessments is currently counted as an event at the progression date. This discrepancy must be resolved before SAP finalization.
+
+7.2 OS Analysis
+OS is analyzed using stratified log-rank and Cox methods. Subjects alive are censored at last known alive date.
+
+7.3 ORR
+Confirmed CR or PR is summarized and compared using a stratified Cochran-Mantel-Haenszel method. Exact derivation traceability to RS/TR/TU is pending.
+
+9 Missing Data and Sensitivity Analyses
+Sensitivity analyses for PFS will assess alternative handling of prolonged missing assessments. Exact algorithms are not yet specified.
+
+12 Safety
+Treatment-emergent adverse events (TEAEs), serious adverse events (SAEs), and adverse events of special interest (AESIs) are summarized in the safety population.

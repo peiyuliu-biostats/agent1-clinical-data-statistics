@@ -1,0 +1,6 @@
+Dataset,Variable,Label,Type,Requirement
+DEMOG,SUBJID,Subject Identifier,character,required
+TUMOR,TEST,Assessment Test,character,required
+TUMOR,RESULT,Assessment Result,character,required
+TUMOR,ASSESSDT,Assessment Date,date,required
+DEATH,DTHDT,Death Date,date,optional

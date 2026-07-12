@@ -1,0 +1,61 @@
+STUDYID,USUBJID,PARAMCD,PARAM,AVALC,ITTFL,TRT01P
+NSCLC-DEMO-001,NSCLC-001-001,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-002,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-003,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-004,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-005,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-006,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-007,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-008,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-009,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-010,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-011,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-012,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-013,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-014,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-015,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-016,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-017,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-018,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-019,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-020,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-021,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-022,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-023,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-024,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-025,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-026,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-027,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-028,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-029,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-030,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-031,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-032,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-033,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-034,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-035,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-036,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-037,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-038,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-039,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-040,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-041,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-042,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-043,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-044,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-045,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-046,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-047,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-048,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-049,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-050,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-051,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-052,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-053,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-054,BOR,Best Overall Response,SD,Y,Control
+NSCLC-DEMO-001,NSCLC-001-055,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-056,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-057,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-058,BOR,Best Overall Response,PR,Y,Control
+NSCLC-DEMO-001,NSCLC-001-059,BOR,Best Overall Response,PR,Y,Drug X
+NSCLC-DEMO-001,NSCLC-001-060,BOR,Best Overall Response,PR,Y,Control

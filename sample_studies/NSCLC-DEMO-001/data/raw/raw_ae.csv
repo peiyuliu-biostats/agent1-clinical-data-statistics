@@ -1,0 +1,83 @@
+SUBJID,AETERM,AESTDT,GRADE,SERIOUS
+001,Decreased Appetite,2025-03-26,2,N
+001,Fatigue,2025-04-14,3,N
+003,Decreased Appetite,2025-03-04,1,N
+004,Decreased Appetite,2025-01-22,1,N
+005,Decreased Appetite,2025-05-12,2,N
+005,Neutropenia,2025-01-25,1,N
+006,Rash,2025-02-28,2,N
+007,Anemia,2025-03-29,2,N
+007,Fatigue,2025-03-21,2,N
+007,Neutropenia,2025-02-01,2,N
+008,Anemia,2025-04-30,2,N
+008,Rash,2025-04-24,2,N
+011,Fatigue,2025-02-01,2,N
+011,Decreased Appetite,2025-04-09,1,N
+012,Rash,2025-05-30,2,N
+012,Rash,2025-04-22,2,N
+012,Fatigue,2025-04-12,2,N
+013,Rash,2025-02-09,1,N
+013,Neutropenia,2025-03-14,2,N
+013,Decreased Appetite,2025-06-30,1,N
+015,Rash,2025-04-24,2,N
+015,Rash,2025-03-26,2,N
+016,Decreased Appetite,2025-05-28,1,N
+016,Decreased Appetite,2025-03-27,1,N
+019,Anemia,2025-05-23,1,N
+020,Neutropenia,2025-03-20,2,N
+021,Fatigue,2025-05-15,2,N
+021,Decreased Appetite,2025-06-27,2,N
+021,Anemia,2025-05-31,3,N
+023,Fatigue,2025-03-03,2,N
+025,Nausea,2025-05-27,2,N
+027,Nausea,2025-03-30,1,N
+027,Nausea,2025-03-20,2,N
+028,Fatigue,2025-07-25,3,Y
+028,Anemia,2025-06-05,3,N
+028,Anemia,2025-05-21,1,N
+029,Nausea,2025-03-29,2,N
+031,Neutropenia,2025-05-13,2,N
+031,Decreased Appetite,2025-04-06,1,N
+032,Neutropenia,2025-07-03,2,N
+032,Rash,2025-05-12,1,N
+033,Neutropenia,2025-07-02,1,N
+033,Anemia,2025-07-07,3,N
+034,Anemia,2025-07-27,3,N
+034,Decreased Appetite,2025-05-31,2,N
+034,Nausea,2025-08-06,2,N
+035,Anemia,2025-03-25,2,N
+035,Fatigue,2025-05-12,1,N
+035,Decreased Appetite,2025-07-31,1,N
+038,Anemia,2025-07-25,1,N
+039,Decreased Appetite,2025-05-05,2,N
+039,Decreased Appetite,2025-05-29,2,N
+039,Neutropenia,2025-06-11,3,N
+041,Anemia,2025-06-14,1,N
+041,Anemia,2025-06-16,3,Y
+041,Neutropenia,2025-05-26,1,N
+042,Anemia,2025-05-07,1,N
+042,Neutropenia,2025-08-07,1,N
+042,Decreased Appetite,2025-08-10,2,N
+043,Decreased Appetite,2025-08-09,1,N
+043,Neutropenia,2025-04-11,1,N
+044,Rash,2025-08-21,1,N
+044,Anemia,2025-05-20,1,N
+045,Decreased Appetite,2025-04-26,1,N
+046,Nausea,2025-05-18,1,N
+046,Fatigue,2025-04-20,2,N
+046,Decreased Appetite,2025-08-19,1,N
+048,Fatigue,2025-08-14,3,N
+048,Rash,2025-07-01,2,N
+050,Anemia,2025-08-08,2,N
+050,Anemia,2025-08-17,3,N
+050,Fatigue,2025-08-09,3,N
+051,Neutropenia,2025-09-01,1,N
+051,Rash,2025-07-02,1,N
+051,Anemia,2025-09-09,3,N
+052,Anemia,2025-06-23,1,N
+055,Nausea,2025-07-28,2,N
+056,Rash,2025-09-13,2,N
+057,Fatigue,2025-05-23,2,N
+058,Neutropenia,2025-09-09,2,N
+059,Fatigue,2025-06-01,3,Y
+059,Neutropenia,2025-09-13,2,N

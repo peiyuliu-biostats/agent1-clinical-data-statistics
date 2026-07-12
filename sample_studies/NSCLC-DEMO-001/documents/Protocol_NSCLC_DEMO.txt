@@ -1,0 +1,24 @@
+NSCLC-DEMO-001 — SIMULATED PROTOCOL
+Version 1.0. This document is synthetic and for demonstration only.
+
+1. Study Design
+This is a randomized, double-blind, active-controlled Phase III study in adults with advanced non-small cell lung cancer (NSCLC). Subjects are randomized 1:1 to Drug X or Control and stratified by PD-L1 category and disease stage.
+
+3. Objectives
+Primary objective: evaluate efficacy of Drug X versus Control based on progression-free survival (PFS).
+Secondary objectives: compare overall survival (OS), objective response rate (ORR), duration of response (DOR), and safety.
+
+5. Disease Assessment
+Tumor assessments are performed every 6 weeks through Week 48 and every 12 weeks thereafter using RECIST 1.1. Responses include complete response (CR), partial response (PR), stable disease (SD), and progressive disease (PD).
+
+9.2.1 Primary Endpoint
+PFS is time from randomization to the first documented disease progression per investigator assessment or death from any cause, whichever occurs first. A subject without an event is censored at the last adequate tumor assessment. If two or more consecutive scheduled tumor assessments are missing before progression, the subject is censored at the last adequate assessment before the gap.
+
+9.2.2 Secondary Endpoint
+OS is time from randomization to death from any cause. Subjects alive at analysis cutoff are censored at the last known alive date.
+
+9.3 Analysis Population
+The intent-to-treat (ITT) population includes all randomized subjects. The safety population includes all subjects receiving at least one dose and is analyzed according to actual treatment received.
+
+10 Statistical Analysis
+The primary comparison uses a stratified log-rank test. A stratified Cox model estimates the hazard ratio and confidence interval. Multiplicity follows a hierarchical strategy: PFS, then OS, then ORR. Target enrollment is 420 subjects; detailed assumptions are in the SAP.
