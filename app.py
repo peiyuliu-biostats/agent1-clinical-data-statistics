@@ -332,8 +332,9 @@ with tabs[5]:
         st.write(selected["description"])
         st.caption(f"Evidence: {selected['location']} · Impact: {selected['impact']}")
         allowed = sorted(ISSUE_TRANSITIONS.get(selected["status"], set()))
+        default_idx = allowed.index("Under Review") if "Under Review" in allowed else 0
         with st.form("issue_transition"):
-            next_status = st.selectbox("Next status", allowed)
+            next_status = st.selectbox("Next status", allowed, index=default_idx)
             actor = st.text_input("Reviewer", value="Human Reviewer")
             rationale = st.text_area("Decision rationale", placeholder="Required: record the evidence and reason for this human decision.")
             transition = st.form_submit_button("Record human decision", type="primary")
