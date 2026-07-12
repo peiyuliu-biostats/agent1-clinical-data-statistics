@@ -14,7 +14,7 @@ An evidence-grounded, interactive AI assistant designed to support clinical stat
 
 Biostatisticians entering the pharmaceutical industry face an overwhelming volume of domain knowledge that extends far beyond statistics:
 
-- **Terminology and abbreviations**: Clinical trials use hundreds of specialized abbreviations (PFS, OS, ORR, DOR, ITT, mITT, TEAE, SAE, AESI, RECIST, CR, PR, PD, SD...) that carry different meanings depending on context. "PD" can mean "progressive disease" in efficacy analysis or "protocol deviation" in data quality — confusing these has real consequences for analysis.
+- **Terminology and abbreviations**: Clinical trials use hundreds of specialized abbreviations (PFS, OS, ORR, DOR, ITT, mITT, TEAE, SAE, AESI, RECIST, CR, PR, PD, SD...) that carry different meanings depending on context. "PD" can mean "progressive disease" in efficacy analysis or "protocol deviation" in data quality.
 
 - **Specification design**: Creating SDTM and ADaM specifications requires understanding CDISC standards, variable naming conventions, controlled terminology, derivation rules, and traceability requirements. Junior statisticians often inherit templates without understanding why columns exist or how datasets connect.
 
@@ -28,7 +28,7 @@ This agent was built to give junior biostatisticians a structured, evidence-grou
 
 ## 2. How AI Tools Assisted Development
 
-This project was developed collaboratively between a human biostatistician and AI coding assistants (Codex, Claude Code). The AI contributed
+This project was developed collaboratively with AI coding assistants (Codex, Claude Code). The AI contributed
 
 - **Architecture design**: Suggesting the modular structure (agent, database, ingestion, knowledge, specs, service, reporting) and the separation between deterministic validation and LLM-powered Q&A.
 - **Code drafting and degugging**: Draft and review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
@@ -38,11 +38,11 @@ This project was developed collaboratively between a human biostatistician and A
 
 ## 3. Human Decisions and Debugging
 
-While AI generated much of the code, the human made all critical decisions:
+While AI generated much of the code, the human (me) made all critical decisions:
 
 - **Domain modeling**: Choosing which clinical concepts to include, how to represent the relationship between Protocol, SAP, SDTM Spec, and ADaM Spec, and what constitutes a meaningful "issue" worth flagging.
 - **Validation rules**: Defining which SDTM/ADaM column checks to run, what severity levels to assign, and how the issue state machine (Open → Under Review → Confirmed → Resolved) should work.
-- **Code reviewing**: Review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
+- **Code reviewing**: Review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), API integration with structured JSON Schema output, and Pydantic data models.
 - **Evidence architecture**: Deciding that all project-specific claims must have validated citations from parsed documents, and that general medical knowledge should be clearly distinguished from project-defined facts.
 - **UI/Bilingual design**: Choosing to use bilingual (English with Chinese annotations) specifically in the Q&A interface to support non-native English speakers, while keeping the rest of the UI in clean English.
 - **Quality review**: Manually testing every feature, verifying that mock answers match real clinical knowledge, checking that Gemini API responses meet quality standards, and debugging integration issues.
