@@ -155,14 +155,14 @@ with tabs[0]:
         d2.metric("Datasets（数据集）", len(manifest["datasets"]))
         d3.metric("Generation seed（生成种子）", manifest["seed"])
         inventory = pd.DataFrame(manifest["datasets"])
-        st.dataframe(inventory, use_container_width=True, hide_index=True)
+        st.dataframe(inventory, width='stretch', hide_index=True)
         selected_dataset = st.selectbox("Preview dataset（预览数据集）", inventory["name"].tolist())
         selected_meta = next(x for x in manifest["datasets"] if x["name"] == selected_dataset)
         folder = selected_meta["layer"].lower()
         csv_path = ROOT / "sample_studies" / STUDY_ID / "data" / folder / f"{selected_dataset}.csv"
         if csv_path.exists():
             preview = pd.read_csv(csv_path).head(20)
-            st.dataframe(preview, use_container_width=True, hide_index=True)
+            st.dataframe(preview, width='stretch', hide_index=True)
         st.download_button("Download complete synthetic package（下载完整合成数据包）", synthetic_zip(), f"{STUDY_ID}_synthetic_data.zip", "application/zip")
         st.caption(manifest["disclaimer"])
     else:
