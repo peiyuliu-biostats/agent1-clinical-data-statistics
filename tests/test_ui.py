@@ -12,10 +12,10 @@ def test_streamlit_app_renders_without_exception(monkeypatch):
     assert app.title[0].value == "Clinical Statistics Agent"
     assert len(app.tabs) == 6
     assert [tab.label for tab in app.tabs] == [
-        "Study Overview（研究概览）",
-        "Documents（文档）",
-        "Disease Context（疾病背景）",
-        "Ask & Evidence（问答与证据）",
-        "Terminology（术语）",
-        "Issues & Questions（问题与确认）",
+        "Study Overview",
+        "Documents",
+        "Disease Context",
+        "Ask & Evidence",
+        "Terminology",
+        "Issues & Questions",
     ]

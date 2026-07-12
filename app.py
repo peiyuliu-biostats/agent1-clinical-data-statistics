@@ -33,7 +33,6 @@ st.markdown(
 
 
 def open_app_connection():
-    """Return a connection created in the current Streamlit execution thread."""
     con = connect(settings.db_path)
     exists = con.execute("SELECT 1 FROM studies WHERE id=?", (STUDY_ID,)).fetchone()
     if exists:
@@ -78,12 +77,12 @@ def render_answer(answer: dict) -> None:
                 st.markdown(f"**{citation['document']} — {citation['location']}** · `{citation['source_class']}`")
                 st.code(citation["excerpt"], language=None)
     else:
-        st.warning("No validated project citation was returned（未返回已验证的项目出处）.")
+        st.warning("No validated project citation was returned.")
     if answer.get("uncertainties"):
-        st.warning("Uncertainties（不确定性）: " + " | ".join(answer["uncertainties"]))
+        st.warning("Uncertainties: " + " | ".join(answer["uncertainties"]))
     if answer.get("questions_for_review"):
-        st.info("Questions requiring review（需确认问题）: " + " | ".join(answer["questions_for_review"]))
-    st.caption(f"Confidence（置信度）: {answer.get('confidence', 'unknown')}")
+        st.info("Questions requiring review: " + " | ".join(answer["questions_for_review"]))
+    st.caption(f"Confidence: {answer.get('confidence', 'unknown')}")
 
 
 con = open_app_connection()
@@ -93,39 +92,64 @@ state = snapshot(con, ROOT)
 study = state["study"]
 
 st.title("Clinical Statistics Agent")
-st.caption("Phase 1 MVP · Synthetic NSCLC study · evidence-grounded answers · human-reviewed issues")
+st.caption("Evidence-grounded assistant for clinical statisticians · Powered by Gemini")
 
 with st.sidebar:
     st.subheader("NSCLC-DEMO-001")
-    st.write("Phase III · Oncology")
-    st.write("PFS · OS · ORR")
+    st.write("Phase III · Oncology · PFS / OS / ORR")
     mode = "LIVE API" if settings.live_ready else "MOCK / OFFLINE"
     st.info(f"Mode: {mode}\n\nProvider: {settings.provider}\n\nModel: {settings.active_model}")
+
+    st.divider()
+    st.subheader("Quick Upload")
+    with st.form("sidebar_upload", clear_on_submit=True):
+        uploaded = st.file_uploader("Upload document", type=["pdf", "docx", "xlsx", "xlsm"], label_visibility="collapsed")
+        kind = st.selectbox("Type", ["Protocol", "SAP", "SDTM Spec", "ADaM Spec"])
+        sidebar_submit = st.form_submit_button("Parse & Index", type="primary", use_container_width=True)
+    if sidebar_submit:
+        if uploaded is None:
+            st.error("Choose a file first.")
+        else:
+            target = ROOT / "data" / "uploads" / STUDY_ID / uploaded.name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(uploaded.getbuffer())
+            try:
+                result = ingest(con, STUDY_ID, target, kind)
+                issue_count = 0
+                if kind in {"SDTM Spec", "ADaM Spec"}:
+                    issue_count = persist_spec_issues(con, target, "SDTM" if kind == "SDTM Spec" else "ADAM")
+                audit(con, STUDY_ID, "document_uploaded", {"name": uploaded.name, "kind": kind, "chunks": result["chunks"], "issues": issue_count})
+                st.success(f"Parsed {result['chunks']} chunks; {issue_count} issues detected.")
+                st.rerun()
+            except Exception as exc:
+                audit(con, STUDY_ID, "document_parse_failed", {"name": uploaded.name, "kind": kind, "error_type": type(exc).__name__})
+                st.error(f"Parse error: {type(exc).__name__}: {exc}")
 
     st.divider()
     st.subheader("Export")
     report_html = html_report(study, state["disease"], state["terms"], state["relationships"], state["issues"])
     report_xlsx = excel_report(study, state["disease"], state["documents"], state["terms"], state["relationships"], state["issues"])
-    st.download_button("Export HTML", report_html, f"{STUDY_ID}_review.html", "text/html", width='stretch')
-    st.download_button("Export Excel", report_xlsx, f"{STUDY_ID}_review.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", width='stretch')
+    st.download_button("Export HTML Report", report_html, f"{STUDY_ID}_review.html", "text/html", use_container_width=True)
+    st.download_button("Export Excel Report", report_xlsx, f"{STUDY_ID}_review.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", use_container_width=True)
 
     st.divider()
-    if st.button("Reset synthetic study", width='stretch'):
+    if st.button("Reset Demo Study", use_container_width=True):
         con.close()
         fresh, *_ = initialize_demo(ROOT, settings.db_path)
         fresh.close()
         st.rerun()
-    st.markdown("<div class='small-note'>Synthetic data only. Outputs are drafts requiring professional review.</div>", unsafe_allow_html=True)
+    st.markdown("<div class='small-note'>Synthetic data only. All outputs require professional review.</div>", unsafe_allow_html=True)
 
 tabs = st.tabs([
-    "Study Overview（研究概览）",
-    "Documents（文档）",
-    "Disease Context（疾病背景）",
-    "Ask & Evidence（问答与证据）",
-    "Terminology（术语）",
-    "Issues & Questions（问题与确认）",
+    "Study Overview",
+    "Documents",
+    "Disease Context",
+    "Ask & Evidence",
+    "Terminology",
+    "Issues & Questions",
 ])
 
+# --- Tab 0: Study Overview ---
 with tabs[0]:
     st.header("Study Overview")
     c1, c2, c3, c4 = st.columns(4)
@@ -137,66 +161,70 @@ with tabs[0]:
     st.write(study["design"])
     left, right = st.columns(2)
     with left:
-        st.markdown("#### Objectives and endpoints")
+        st.markdown("#### Objectives and Endpoints")
         st.markdown("- **Primary:** evaluate efficacy based on PFS")
         st.markdown("- **Secondary:** OS, ORR and DOR")
         st.markdown("- **Safety:** TEAE, SAE and AESI summaries")
     with right:
-        st.markdown("#### Current evidence status")
+        st.markdown("#### Current Evidence Status")
         st.metric("Parsed documents", len(state["documents"]))
         st.metric("Open review issues", sum(i["status"] not in {"Resolved", "Rejected"} for i in state["issues"]))
-    st.warning("This is a hard-coded synthetic study for demonstration. Study creation and multi-study management are intentionally outside Phase 1.")
-    st.subheader("Synthetic Data Package（完整合成数据包）")
+
+    st.subheader("Synthetic Data Package")
     manifest_path = ROOT / "sample_studies" / STUDY_ID / "data" / "manifest.json"
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         d1, d2, d3 = st.columns(3)
-        d1.metric("Synthetic subjects（合成受试者）", manifest["subjects"])
-        d2.metric("Datasets（数据集）", len(manifest["datasets"]))
-        d3.metric("Generation seed（生成种子）", manifest["seed"])
+        d1.metric("Synthetic subjects", manifest["subjects"])
+        d2.metric("Datasets", len(manifest["datasets"]))
+        d3.metric("Generation seed", manifest["seed"])
         inventory = pd.DataFrame(manifest["datasets"])
         st.dataframe(inventory, width='stretch', hide_index=True)
-        selected_dataset = st.selectbox("Preview dataset（预览数据集）", inventory["name"].tolist())
+        selected_dataset = st.selectbox("Preview dataset", inventory["name"].tolist())
         selected_meta = next(x for x in manifest["datasets"] if x["name"] == selected_dataset)
         folder = selected_meta["layer"].lower()
         csv_path = ROOT / "sample_studies" / STUDY_ID / "data" / folder / f"{selected_dataset}.csv"
         if csv_path.exists():
             preview = pd.read_csv(csv_path).head(20)
             st.dataframe(preview, width='stretch', hide_index=True)
-        st.download_button("Download complete synthetic package（下载完整合成数据包）", synthetic_zip(), f"{STUDY_ID}_synthetic_data.zip", "application/zip")
+        st.download_button("Download complete synthetic package", synthetic_zip(), f"{STUDY_ID}_synthetic_data.zip", "application/zip")
         st.caption(manifest["disclaimer"])
     else:
         st.warning("Synthetic manifest is not available. Run scripts/generate_demo.py.")
 
+# --- Tab 1: Documents ---
 with tabs[1]:
     st.header("Document Center")
-    st.write("Upload and index one of the four Phase 1 document classes. Parsed evidence becomes available to Ask & Evidence and Terminology.")
+    st.write("Upload and index clinical trial documents. Parsed evidence becomes searchable in Ask & Evidence and Terminology.")
     docs = pd.DataFrame(state["documents"])
     if not docs.empty:
         st.dataframe(docs[["name", "kind", "status", "version"]], width='stretch', hide_index=True)
+    else:
+        st.info("No documents indexed yet. Upload via the sidebar or the form below.")
     with st.form("document_upload", clear_on_submit=True):
-        uploaded = st.file_uploader("Protocol / SAP / SDTM Spec / ADaM Spec", type=["pdf", "docx", "xlsx", "xlsm"])
-        kind = st.selectbox("Document type", ["Protocol", "SAP", "SDTM Spec", "ADaM Spec"])
+        uploaded_main = st.file_uploader("Protocol / SAP / SDTM Spec / ADaM Spec", type=["pdf", "docx", "xlsx", "xlsm"])
+        kind_main = st.selectbox("Document type", ["Protocol", "SAP", "SDTM Spec", "ADaM Spec"])
         submitted = st.form_submit_button("Upload, parse and index", type="primary")
     if submitted:
-        if uploaded is None:
+        if uploaded_main is None:
             st.error("Choose a file before submitting.")
         else:
-            target = ROOT / "data" / "uploads" / STUDY_ID / uploaded.name
+            target = ROOT / "data" / "uploads" / STUDY_ID / uploaded_main.name
             target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_bytes(uploaded.getbuffer())
+            target.write_bytes(uploaded_main.getbuffer())
             try:
-                result = ingest(con, STUDY_ID, target, kind)
+                result = ingest(con, STUDY_ID, target, kind_main)
                 issue_count = 0
-                if kind in {"SDTM Spec", "ADaM Spec"}:
-                    issue_count = persist_spec_issues(con, target, "SDTM" if kind == "SDTM Spec" else "ADAM")
-                audit(con, STUDY_ID, "document_uploaded", {"name": uploaded.name, "kind": kind, "chunks": result["chunks"], "issues": issue_count})
+                if kind_main in {"SDTM Spec", "ADaM Spec"}:
+                    issue_count = persist_spec_issues(con, target, "SDTM" if kind_main == "SDTM Spec" else "ADAM")
+                audit(con, STUDY_ID, "document_uploaded", {"name": uploaded_main.name, "kind": kind_main, "chunks": result["chunks"], "issues": issue_count})
                 st.success(f"Parsed {result['chunks']} evidence chunks; detected {issue_count} specification issues.")
                 st.rerun()
             except Exception as exc:
-                audit(con, STUDY_ID, "document_parse_failed", {"name": uploaded.name, "kind": kind, "error_type": type(exc).__name__})
+                audit(con, STUDY_ID, "document_parse_failed", {"name": uploaded_main.name, "kind": kind_main, "error_type": type(exc).__name__})
                 st.error(f"Parsing failed safely: {type(exc).__name__}: {exc}")
 
+# --- Tab 2: Disease Context ---
 with tabs[2]:
     st.header("Disease & Study Context")
     disease = state["disease"]
@@ -204,30 +232,35 @@ with tabs[2]:
     st.write(disease["summary"])
     c1, c2 = st.columns(2)
     with c1:
-        st.markdown("#### Trial relevance")
+        st.markdown("#### Trial Relevance")
         for x in disease["trial_relevance"]:
             st.markdown(f"- {x}")
-        st.markdown("#### Common endpoints")
+        st.markdown("#### Common Endpoints")
         st.write(", ".join(disease["common_endpoints"]))
     with c2:
-        st.markdown("#### Statistical considerations")
+        st.markdown("#### Statistical Considerations")
         for x in disease["statistical_considerations"]:
             st.markdown(f"- {x}")
-        st.markdown("#### Typical structures")
+        st.markdown("#### Typical Data Structures")
         st.write("SDTM: " + ", ".join(disease["common_sdtm_domains"]))
         st.write("ADaM: " + ", ".join(disease["common_adam_datasets"]))
-    st.info("This is a curated static Phase 1 knowledge card. It is not generated in real time, and project definitions take priority.")
+    st.info("This is a curated knowledge card. It is not generated in real time, and project definitions always take priority.")
     st.warning(disease["source_note"])
 
+# --- Tab 3: Ask & Evidence (BILINGUAL) ---
 with tabs[3]:
     st.header("Ask & Evidence（问答与证据）")
-    st.write("Questions and answers are bilingual where useful. Project claims require locally validated citations.（项目事实必须有本地验证出处。）")
+    st.write("Ask questions about the study in English or Chinese. Answers are bilingual where useful. Project claims require locally validated citations.（项目事实必须有本地验证出处。）")
     prompts = [
         "How is PFS defined in this study, and are the Protocol and SAP consistent?（本研究如何定义PFS，Protocol与SAP是否一致？）",
         "What does PD mean in the efficacy and data-quality contexts?（PD在疗效与数据质量语境中分别是什么意思？）",
         "Which datasets support the PFS analysis?（哪些数据集支持PFS分析？）",
         "What questions should be escalated to the senior statistician?（哪些问题需要向Senior Statistician确认？）",
         "Explain the ITT population definition and its unresolved issue.（解释ITT人群定义及未解决问题。）",
+        "How is OS defined and analyzed?（OS如何定义和分析？）",
+        "Describe the safety analysis plan.（描述安全性分析计划。）",
+        "What are the stratification factors?（分层因素是什么？）",
+        "What is the tumor assessment schedule?（肿瘤评估时间表是什么？）",
     ]
     selected_prompt = st.selectbox("Suggested questions（建议问题）", ["Custom question（自定义问题）"] + prompts)
     default_question = "" if selected_prompt.startswith("Custom") else selected_prompt
@@ -236,23 +269,22 @@ with tabs[3]:
         ask = st.form_submit_button("Ask with evidence（带证据提问）", type="primary")
     if ask:
         if not question.strip():
-            st.error("Enter a question（请输入问题）.")
+            st.error("Enter a question.（请输入问题。）")
         else:
-            with st.spinner("Retrieving, answering and validating citations...（检索、回答并验证出处）"):
+            with st.spinner("Retrieving, answering and validating citations...（检索、回答并验证出处...）"):
                 try:
                     ans = answer_question(con, STUDY_ID, question)
                     qa_id = save_qa(con, STUDY_ID, st.session_state.session_id, question, ans.model_dump(), settings.mode)
                     audit(con, STUDY_ID, "question_answered", {"qa_id": qa_id, "question": question, "mode": settings.mode, "citation_count": len(ans.citations)})
-                    st.success("Answer saved to this session（回答已保存至当前会话）.")
                     st.rerun()
                 except Exception as exc:
                     audit(con, STUDY_ID, "answer_failed", {"error_type": type(exc).__name__})
-                    st.error(f"Answer failed safely（回答安全失败）: {type(exc).__name__}: {exc}")
+                    st.error(f"Answer failed: {type(exc).__name__}: {exc}")
 
     history = load_qa(con, STUDY_ID, st.session_state.session_id)
     st.subheader("Conversation history（对话历史）")
     if not history:
-        st.caption("No questions in this browser session yet（当前浏览器会话尚无问题）.")
+        st.caption("No questions in this browser session yet.（当前浏览器会话尚无问题。）")
     for item in reversed(history):
         with st.chat_message("user"):
             st.markdown(item["question"])
@@ -264,11 +296,12 @@ with tabs[3]:
             if fb2.button("👎 Needs improvement", key=f"improve-{item['id']}"):
                 save_feedback(con, item["id"], "Needs improvement"); st.rerun()
             if item.get("feedback"):
-                st.caption(f"Feedback recorded（已记录反馈）: {item['feedback']}")
+                st.caption(f"Feedback recorded: {item['feedback']}")
 
+# --- Tab 4: Terminology ---
 with tabs[4]:
     st.header("Terminology")
-    st.write("Merged view of terms found in parsed project documents and the curated NSCLC/clinical-statistics dictionary.")
+    st.write("Merged view of terms found in parsed project documents and the curated clinical-statistics dictionary.")
     terms = pd.DataFrame(state["terms"])
     query = st.text_input("Filter by abbreviation, meaning or context")
     if query and not terms.empty:
@@ -277,6 +310,7 @@ with tabs[4]:
     st.dataframe(terms, width='stretch', hide_index=True)
     st.info("PD and CR are context-dependent: response, protocol-deviation and laboratory contexts must not be merged without evidence.")
 
+# --- Tab 5: Issues & Questions ---
 with tabs[5]:
     st.header("Issues & Questions")
     st.write("Deterministic checks and Agent suggestions remain drafts until a human reviewer records a decision and rationale.")
@@ -291,7 +325,7 @@ with tabs[5]:
         filtered = issue_df[issue_df["severity"].isin(severity) & issue_df["status"].isin(status)]
         st.dataframe(filtered, width='stretch', hide_index=True)
 
-        st.subheader("Human confirmation workflow")
+        st.subheader("Human Confirmation Workflow")
         selected_id = st.selectbox("Issue", filtered["issue_id"].tolist() if not filtered.empty else issue_df["issue_id"].tolist())
         selected = next(i for i in issues if i["issue_id"] == selected_id)
         st.markdown(f"**Current status:** `{selected['status']}`  |  **Owner:** {selected['owner']}  |  **Severity:** {selected['severity']}")
@@ -312,7 +346,7 @@ with tabs[5]:
             except Exception as exc:
                 st.error(str(exc))
 
-        st.subheader("Decision history")
+        st.subheader("Decision History")
         history = pd.DataFrame(state["issue_history"])
         if history.empty:
             st.caption("No human decisions recorded yet.")
