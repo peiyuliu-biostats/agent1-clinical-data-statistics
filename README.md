@@ -1,8 +1,8 @@
 # Clinical Statistics Agent
 
-An evidence-grounded, interactive AI assistant built to support biostatisticians working on CDISC-based clinical trials — especially new to the industry who face a steep learning curve across therapeutic areas, regulatory frameworks, and statistical programming standards.
+An evidence-grounded, interactive AI assistant designed to support clinical statisticians navigating the complexities of CDISC-based clinical trials. Inspired by my real-world experiences in BMS Data Quantitative Sciences Department, where junior statisticians often encounter challenges with unfamiliar disease areas, clinical terminology, trial concepts, and programming standards, this assistant helps bridge the gap between statistical expertise and therapeutic knowledges.
 
-> **AI-assisted draft only.** This MVP is not validated for GxP, regulatory submission, medical decision-making, or use with real patient/company data.
+> **Current status** This MVP is not validated for GxP, regulatory submission, medical decision-making, or use with real patient/company data yet.
 
 ## Live Demo
 
@@ -73,33 +73,6 @@ While AI generated much of the code, the human made all critical decisions:
 - **Mock mode** (default, no API key needed): Returns curated bilingual answers for common clinical questions. Fully functional for demonstration.
 - **Live mode** (requires Gemini API key): Sends questions to Google Gemini with structured JSON output, retrieves evidence from parsed documents, and validates citations against the local database.
 
-### Quick Start
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run in mock mode (no API key needed)
-python -m streamlit run app.py
-
-# Or run in live mode with Gemini
-cp .env.example .env
-# Edit .env: set GEMINI_API_KEY and AGENT_MODE=live
-python -m streamlit run app.py
-```
-
-On Windows, double-click `start.cmd` instead.
-
-## Deliberately Seeded Findings
-
-The synthetic study includes real-world-style issues for demonstration:
-
-- Protocol/SAP conflict for prolonged missing tumor assessments in PFS
-- Missing SDTM mapping and source lineage
-- Invalid SDTM variable types
-- Missing ADaM source/derivation/traceability
-- Unresolved erroneous-randomization handling for ITT
-
 ## Validation Boundary
 
-This is an engineering MVP. Before regulated use it requires: approved source licensing, organizational privacy review, role-based access, immutable audit controls, risk-based computerized-system validation, professional content validation, change control, backup/recovery, and formal user acceptance testing.
+This is an engineering MVP now. For educatiing and learning at this stage.
