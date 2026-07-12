@@ -1,12 +1,12 @@
 # Clinical Statistics Agent
 
-An evidence-grounded, interactive AI assistant built to support biostatisticians working on CDISC-based clinical trials — especially those new to the industry who face a steep learning curve across therapeutic areas, regulatory frameworks, and statistical programming standards.
+An evidence-grounded, interactive AI assistant built to support biostatisticians working on CDISC-based clinical trials — especially new to the industry who face a steep learning curve across therapeutic areas, regulatory frameworks, and statistical programming standards.
 
 > **AI-assisted draft only.** This MVP is not validated for GxP, regulatory submission, medical decision-making, or use with real patient/company data.
 
 ## Live Demo
 
-**[Open the live app on Streamlit Cloud](https://clinical-stat-agent.streamlit.app)** — no installation needed.
+**[Open the live app on Streamlit Cloud](https://aiagent-clinical-data-statistics.streamlit.app/)** — no installation needed.
 
 ---
 
@@ -28,10 +28,10 @@ This agent was built to give junior biostatisticians a structured, evidence-grou
 
 ## 2. How AI Tools Assisted Development
 
-This project was developed collaboratively between a human biostatistician and AI coding assistants (Claude Code). The AI contributed:
+This project was developed collaboratively between a human biostatistician and AI coding assistants (Codex, Claude Code). The AI contributed
 
 - **Architecture design**: Suggesting the modular structure (agent, database, ingestion, knowledge, specs, service, reporting) and the separation between deterministic validation and LLM-powered Q&A.
-- **Code generation**: Writing the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
+- **Code drafting and degugging**: Draft and review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
 - **Synthetic data generation**: Creating a realistic 60-subject NSCLC Phase III dataset across RAW, SDTM, and ADaM layers with deliberate quality issues for demonstration.
 - **Bug detection and fixing**: Identifying issues like citation validation failures, encoding errors on Windows, API response parsing edge cases, and Streamlit deprecation warnings.
 - **Deployment configuration**: Setting up Streamlit Cloud deployment files, environment variable handling, and security practices for API key management.
@@ -42,10 +42,11 @@ While AI generated much of the code, the human made all critical decisions:
 
 - **Domain modeling**: Choosing which clinical concepts to include, how to represent the relationship between Protocol, SAP, SDTM Spec, and ADaM Spec, and what constitutes a meaningful "issue" worth flagging.
 - **Validation rules**: Defining which SDTM/ADaM column checks to run, what severity levels to assign, and how the issue state machine (Open → Under Review → Confirmed → Resolved) should work.
+- **Code reviewing**: Review the Streamlit frontend, SQLite FTS5 search engine, document parsers (PDF/DOCX/XLSX), Gemini API integration with structured JSON Schema output, and Pydantic data models.
 - **Evidence architecture**: Deciding that all project-specific claims must have validated citations from parsed documents, and that general medical knowledge should be clearly distinguished from project-defined facts.
-- **Bilingual design**: Choosing to use bilingual (English with Chinese annotations) specifically in the Q&A interface to support non-native English speakers, while keeping the rest of the UI in clean English.
+- **UI/Bilingual design**: Choosing to use bilingual (English with Chinese annotations) specifically in the Q&A interface to support non-native English speakers, while keeping the rest of the UI in clean English.
 - **Quality review**: Manually testing every feature, verifying that mock answers match real clinical knowledge, checking that Gemini API responses meet quality standards, and debugging integration issues.
-- **Security**: Ensuring API keys are never committed to version control, configuring `.gitignore` and `.env.example` properly, and reviewing all files before public deployment.
+- **Security**: Ensuring private documents such as API keys/real raw data are never committed to version control, configuring `.gitignore` and `.env.example` properly, and reviewing all files before public deployment.
 
 ## 4. Features and Usage Guide
 
@@ -88,31 +89,6 @@ python -m streamlit run app.py
 ```
 
 On Windows, double-click `start.cmd` instead.
-
-### Deploy to Streamlit Cloud
-
-1. Push this repo to GitHub
-2. Sign in at [share.streamlit.io](https://share.streamlit.io) with your GitHub account
-3. Select this repo, set `app.py` as the entrypoint
-4. In **Advanced settings > Secrets**, add your `GEMINI_API_KEY`, `AGENT_MODE=live`, `MODEL_PROVIDER=gemini`, `GEMINI_MODEL=auto`
-5. Deploy — you'll get a public URL
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed options.
-
-### Generate Synthetic Data
-
-The 60-subject synthetic dataset (14 CSV files) is included. To regenerate:
-```bash
-pip install numpy
-python scripts/generate_demo.py
-```
-
-## Test Suite
-
-```bash
-pip install pytest numpy
-python -m pytest -q
-```
 
 ## Deliberately Seeded Findings
 
