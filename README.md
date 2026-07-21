@@ -4,7 +4,7 @@ An evidence-grounded assistant for clinical statisticians working with CDISC-bas
 
 > **Engineering MVP.** Not validated for GxP, regulatory submission, medical decision-making, or use with real patient or company data.
 
-**[Live demo]([URL](https://aiagent-clinical-data-statistics.streamlit.app/))** · Streamlit Cloud, no installation needed. Runs in mock mode by default.
+**[Live demo][https://aiagent-clinical-data-statistics.streamlit.app/]** · Streamlit Cloud, no installation needed. Runs in mock mode by default.
 
 ---
 
